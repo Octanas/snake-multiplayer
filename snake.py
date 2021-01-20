@@ -35,9 +35,11 @@ while key != 27:
 
     # Registers user input
     event = win.getch()
+
     prevKey = key
 
-    if event != -1:
+    # If an invalid key is pressed, do nothing
+    if event in [KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN, 27, ord(" "), ord("p")]:
         key = event
 
     # If SPACE BAR or P are pressed, pause the game
@@ -55,16 +57,6 @@ while key != 27:
         key = prevKey
         win.addstr(10, 25, "        ")
         continue
-
-    # If an invalid key is pressed, do nothing
-    if key not in [
-        KEY_LEFT,
-        KEY_RIGHT,
-        KEY_UP,
-        KEY_DOWN,
-        27,
-    ]:
-        key = prevKey
 
     # Adds a new head to snake according to their movement
     if key == KEY_DOWN:
@@ -107,14 +99,15 @@ while key != 27:
 
         win.addch(food[0], food[1], "*")
     else:
-         # If it does not eat the food, length decreases
+        # If it does not eat the food, length decreases
         last = snake.pop()
         win.addch(last[0], last[1], " ")
-    
+
     # Draws snake on the screen
     win.addch(snake[0][0], snake[0][1], "#")
 
 curses.endwin()
 
-# Displays final score
-print("\nScore - " + str(score))
+# Displays final score if game has not been exited
+if key != 27:
+    print("Score - " + str(score))
