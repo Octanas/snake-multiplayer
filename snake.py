@@ -2,6 +2,15 @@ import curses
 from curses import KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN
 from random import randint
 
+# Declare constants
+KEY_W = ord("w")
+KEY_S = ord("s")
+KEY_A = ord("a")
+KEY_D = ord("d")
+KEY_P = ord("p")
+SPACE_BAR = ord(" ")
+ESC = 27
+
 # Creates the window and area that the game will be played on
 curses.initscr()
 win = curses.newwin(20, 60, 0, 0)
@@ -12,79 +21,137 @@ curses.curs_set(0)
 win.nodelay(1)
 
 # Initializing values
-snake = [[4, 10], [4, 9], [4, 8]]
+snake_p1 = [[4, 10], [4, 9], [4, 8]]
+snake_p2 = [[16, 10], [16, 9], [16, 8]]
 food = [10, 20]
-score = 0
+food_eaten_p1 = 0
+food_eaten_p2 = 0
+
+# Winner:
+# 0 - DRAW
+# 1 - P1
+# 2 - P2
+winner = 0
 
 # Initializing input
+# P1 and P2 key are used for each snake
 win.keypad(1)
-key = KEY_RIGHT
+key_p1 = KEY_RIGHT
+key_p2 = KEY_D
 
 # Prints the food on screen
 win.addch(food[0], food[1], "*")
 
-# While Esc key is not pressed
-while key != 27:
+# Run forever
+while True:
     # Draws the game area
     win.border(0)
-    win.addstr(0, 2, " Score: " + str(score) + " ")
-    win.addstr(0, 27, " SNAKE ")
+    win.addstr(0, 2, " Food Eaten P1: " + str(food_eaten_p1) + " ")
+    win.addstr(
+        0,
+        40 - (len(str(food_eaten_p2)) - 1),
+        " Food Eaten P2: " + str(food_eaten_p2) + " ",
+    )
+    win.addstr(0, 26, " SNAKE ")
 
     # Increases the speed of Snake as its length increases
-    win.timeout(int(150 - (len(snake) / 5 + len(snake) / 10) % 120))
+    win.timeout(
+        int(
+            150
+            - (len(max(snake_p1, snake_p2)) / 5 + len(max(snake_p1, snake_p2)) / 10)
+            % 120
+        )
+    )
 
     # Registers user input
-    event = win.getch()
-
-    prevKey = key
+    key_event = win.getch()
 
     # If an invalid key is pressed, do nothing
-    if event in [KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN, 27, ord(" "), ord("p")]:
-        key = event
-
+    if key_event in [KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN]:
+        key_p1 = key_event
+    elif key_event in [KEY_W, KEY_S, KEY_A, KEY_D]:
+        key_p2 = key_event
     # If SPACE BAR or P are pressed, pause the game
-    if key == ord(" ") or key == ord("p"):
-        key = -1
+    elif key_event == SPACE_BAR or key_event == KEY_P:
+        key_event = -1
         win.addstr(10, 25, " PAUSED ")
 
-        while key != ord(" ") and key != ord("p") and key != 27:
-            key = win.getch()
+        while key_event != SPACE_BAR and key_event != KEY_P and key_event != ESC:
+            key_event = win.getch()
 
-        # If Esc key is pressed during PAUSE, exit
-        if key == 27:
-            break
-
-        key = prevKey
         win.addstr(10, 25, "        ")
-        continue
 
-    # Adds a new head to snake according to their movement
-    if key == KEY_DOWN:
-        snake.insert(0, [snake[0][0] + 1, snake[0][1]])
-    elif key == KEY_UP:
-        snake.insert(0, [snake[0][0] - 1, snake[0][1]])
-    elif key == KEY_LEFT:
-        snake.insert(0, [snake[0][0], snake[0][1] - 1])
-    elif key == KEY_RIGHT:
-        snake.insert(0, [snake[0][0], snake[0][1] + 1])
-
-    # If snake crosses the boundaries, make it enter from the other side
-    if snake[0][0] == 0:
-        snake[0][0] = 18
-    if snake[0][1] == 0:
-        snake[0][1] = 58
-    if snake[0][0] == 19:
-        snake[0][0] = 1
-    if snake[0][1] == 59:
-        snake[0][1] = 1
-
-    # If snake runs over itself
-    if snake[0] in snake[1:]:
+    # If ESC key is pressed, exit
+    if key_event == ESC:
+        winner = -1
         break
 
-    # If the snake eats the food, its tail is not deleted
-    if snake[0] == food:
-        score += 1
+    # Adds a new head to snake P1 according to their movement
+    if key_p1 == KEY_DOWN:
+        snake_p1.insert(0, [snake_p1[0][0] + 1, snake_p1[0][1]])
+    elif key_p1 == KEY_UP:
+        snake_p1.insert(0, [snake_p1[0][0] - 1, snake_p1[0][1]])
+    elif key_p1 == KEY_LEFT:
+        snake_p1.insert(0, [snake_p1[0][0], snake_p1[0][1] - 1])
+    elif key_p1 == KEY_RIGHT:
+        snake_p1.insert(0, [snake_p1[0][0], snake_p1[0][1] + 1])
+
+    # Adds a new head to snake P1 according to their movement
+    if key_p2 == KEY_S:
+        snake_p2.insert(0, [snake_p2[0][0] + 1, snake_p2[0][1]])
+    elif key_p2 == KEY_W:
+        snake_p2.insert(0, [snake_p2[0][0] - 1, snake_p2[0][1]])
+    elif key_p2 == KEY_A:
+        snake_p2.insert(0, [snake_p2[0][0], snake_p2[0][1] - 1])
+    elif key_p2 == KEY_D:
+        snake_p2.insert(0, [snake_p2[0][0], snake_p2[0][1] + 1])
+
+    # If a snake crosses the boundaries, make it enter from the other side
+    if snake_p1[0][0] == 0:
+        snake_p1[0][0] = 18
+    elif snake_p1[0][0] == 19:
+        snake_p1[0][0] = 1
+    if snake_p1[0][1] == 0:
+        snake_p1[0][1] = 58
+    elif snake_p1[0][1] == 59:
+        snake_p1[0][1] = 1
+
+    if snake_p2[0][0] == 0:
+        snake_p2[0][0] = 18
+    elif snake_p2[0][0] == 19:
+        snake_p2[0][0] = 1
+    if snake_p2[0][1] == 0:
+        snake_p2[0][1] = 58
+    elif snake_p2[0][1] == 59:
+        snake_p2[0][1] = 1
+
+    # If a player touches itself, the game ends
+    if snake_p1[0] in snake_p1[1:]:
+        winner = 2
+        break
+
+    if snake_p2[0] in snake_p2[1:]:
+        winner = 1
+        break
+
+    eaten = False
+
+    # If a player eats the food, their tail is not deleted
+    if snake_p1[0] == food:
+        food_eaten_p1 += 1
+        eaten = True
+    else:
+        last = snake_p1.pop()
+        win.addch(last[0], last[1], " ")
+
+    if snake_p2[0] == food:
+        food_eaten_p2 += 1
+        eaten = True
+    else:
+        last = snake_p2.pop()
+        win.addch(last[0], last[1], " ")
+
+    if eaten:
         food = []
 
         # The new food coordinates are calculated
@@ -94,21 +161,28 @@ while key != 27:
                 randint(1, 58),
             ]
 
-            if food in snake:
+            if food in snake_p1 or food in snake_p2:
                 food = []
 
         win.addch(food[0], food[1], "*")
-    else:
-        # If it does not eat the food, length decreases
-        last = snake.pop()
-        win.addch(last[0], last[1], " ")
 
-    # Draws snake on the screen
-    win.addch(snake[1][0], snake[1][1], "#")
-    win.addch(snake[0][0], snake[0][1], "0")
+    # Draws snakes on the screen
+    win.addch(snake_p1[1][0], snake_p1[1][1], "#")
+    win.addch(snake_p1[0][0], snake_p1[0][1], "0")
+
+    win.addch(snake_p2[1][0], snake_p2[1][1], "#")
+    win.addch(snake_p2[0][0], snake_p2[0][1], "0")
 
 curses.endwin()
 
 # Displays final score if game has not been exited
-if key != 27:
-    print("Score - " + str(score))
+if winner != -1:
+    if winner == 0:
+        print("DRAW")
+    elif winner == 1:
+        print("P1 WINS")
+    elif winner == 2:
+        print("P2 WINS")
+
+    print("P1 Score: " + str(food_eaten_p1))
+    print("P2 Score: " + str(food_eaten_p2))
