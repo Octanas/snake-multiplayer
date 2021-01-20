@@ -149,15 +149,6 @@ while True:
     elif snake_p2[0][1] == 59:
         snake_p2[0][1] = 1
 
-    # If a player touches itself, the game ends
-    if snake_p1[0] in snake_p1[1:]:
-        winner = 2
-        break
-
-    if snake_p2[0] in snake_p2[1:]:
-        winner = 1
-        break
-
     eaten = False
 
     # If a player eats the food, their tail is not deleted
@@ -197,7 +188,19 @@ while True:
     win.addch(snake_p2[1][0], snake_p2[1][1], "#")
     win.addch(snake_p2[0][0], snake_p2[0][1], "0")
 
-curses.endwin()
+    # If the players' heads touch, its a draw
+    if snake_p1[0] == snake_p2[0]:
+        winner = 0
+        break
+
+    # If a player touches itself or the other snake, the game ends
+    if snake_p1[0] in snake_p1[1:] or snake_p1[0] in snake_p2[1:]:
+        winner = 2
+        break
+
+    if snake_p2[0] in snake_p2[1:] or snake_p2[0] in snake_p1[1:]:
+        winner = 1
+        break
 
 # Displays final score if game has not been exited
 if winner != -1:
