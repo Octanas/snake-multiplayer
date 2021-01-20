@@ -68,9 +68,33 @@ while True:
 
     # If an invalid key is pressed, do nothing
     if key_event in [KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN]:
-        key_p1 = key_event
+        backwards = (
+            key_p1 == KEY_LEFT
+            and key_event == KEY_RIGHT
+            or key_p1 == KEY_RIGHT
+            and key_event == KEY_LEFT
+            or key_p1 == KEY_UP
+            and key_event == KEY_DOWN
+            or key_p1 == KEY_DOWN
+            and key_event == KEY_UP
+        )
+
+        if not backwards:
+            key_p1 = key_event
     elif key_event in [KEY_W, KEY_S, KEY_A, KEY_D]:
-        key_p2 = key_event
+        backwards = (
+            key_p2 == KEY_A
+            and key_event == KEY_D
+            or key_p2 == KEY_D
+            and key_event == KEY_A
+            or key_p2 == KEY_W
+            and key_event == KEY_S
+            or key_p2 == KEY_S
+            and key_event == KEY_W
+        )
+
+        if not backwards:
+            key_p2 = key_event
     # If SPACE BAR or P are pressed, pause the game
     elif key_event == SPACE_BAR or key_event == KEY_P:
         key_event = -1
