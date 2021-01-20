@@ -104,7 +104,8 @@ while key != 27:
         win.addch(last[0], last[1], " ")
 
     # Draws snake on the screen
-    win.addch(snake[0][0], snake[0][1], "#")
+    win.addch(snake[1][0], snake[1][1], "#")
+    win.addch(snake[0][0], snake[0][1], "0")
 
 curses.endwin()
 
