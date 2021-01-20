@@ -28,6 +28,8 @@ The following example runs the program with colors enabled with speed of 100 mil
 python snake.py true 100
 ```
 
+**NOTE:** Windows is not able to render the colors, even though *curses* thinks it can
+
 ## Sources
 
 Based on: https://gist.github.com/sanchitgangwar/2158088
