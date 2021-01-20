@@ -48,9 +48,11 @@ if colors and not curses.has_colors():
 curses.start_color()
 curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
 curses.init_pair(2, curses.COLOR_BLUE, curses.COLOR_BLACK)
+curses.init_pair(3, curses.COLOR_YELLOW, curses.COLOR_BLACK)
 
 color_pair_p1 = curses.color_pair(1) if colors else curses.color_pair(0)
 color_pair_p2 = curses.color_pair(2) if colors else curses.color_pair(0)
+color_pair_draw = curses.color_pair(3) if colors else curses.color_pair(0)
 
 # Disables the echo from user input
 curses.noecho()
@@ -85,11 +87,13 @@ while True:
     # Draws the game area
     win.border(0)
     win.addstr(0, 2, " Food Eaten P1: " + str(food_eaten_p1) + " ")
+    win.addstr(0, 14, "P1", color_pair_p1)
     win.addstr(
         0,
         40 - (len(str(food_eaten_p2)) - 1),
         " Food Eaten P2: " + str(food_eaten_p2) + " ",
     )
+    win.addstr(0, 52, "P1", color_pair_p2)
     win.addstr(0, 26, " SNAKE ")
 
     # Set interval between frames
@@ -241,14 +245,18 @@ while True:
 # Displays final result if game has not been exited
 if winner != -1:
     if winner == 0:
-        win.addstr(10, 26, "DRAW")
+        win.addstr(10, 26, "DRAW", color_pair_draw)
     elif winner == 1:
         win.addstr(10, 24, "P1 WINS")
+        win.addstr(10, 24, "P1", color_pair_p1)
     elif winner == 2:
         win.addstr(10, 24, "P2 WINS")
+        win.addstr(10, 24, "P2", color_pair_p2)
 
-    win.addstr(12, 20, "P1 Food Eaten: " + str(food_eaten_p1))
-    win.addstr(13, 20, "P2 Food Eaten: " + str(food_eaten_p2))
+    win.addstr(12, 20, "P1", color_pair_p1)
+    win.addstr(12, 23, "Food Eaten: " + str(food_eaten_p1))
+    win.addstr(13, 20, "P2", color_pair_p2)
+    win.addstr(13, 23, "Food Eaten: " + str(food_eaten_p2))
     win.addstr(15, 19, "Press SPACE to exit")
 
     key_event = -1
