@@ -190,15 +190,18 @@ while True:
 
     # If the players' heads touch, its a draw
     if snake_p1[0] == snake_p2[0]:
+        win.addch(snake_p1[0][0], snake_p1[0][1], "X")
         winner = 0
         break
 
     # If a player touches itself or the other snake, the game ends
     if snake_p1[0] in snake_p1[1:] or snake_p1[0] in snake_p2[1:]:
+        win.addch(snake_p1[0][0], snake_p1[0][1], "X")
         winner = 2
         break
 
     if snake_p2[0] in snake_p2[1:] or snake_p2[0] in snake_p1[1:]:
+        win.addch(snake_p2[0][0], snake_p2[0][1], "X")
         winner = 1
         break
 
