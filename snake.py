@@ -218,9 +218,9 @@ if winner != -1:
     win.addstr(13, 20, "P2 Food Eaten: " + str(food_eaten_p2))
     win.addstr(15, 19, "Press SPACE to exit")
 
-key_event = -1
+    key_event = -1
 
-while key_event != SPACE_BAR:
-    key_event = win.getch()
+    while key_event != SPACE_BAR:
+        key_event = win.getch()
 
 curses.endwin()
