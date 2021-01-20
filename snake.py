@@ -1,3 +1,4 @@
+import sys
 import curses
 from curses import KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN
 from random import randint
@@ -11,9 +12,35 @@ KEY_P = ord("p")
 SPACE_BAR = ord(" ")
 ESC = 27
 
+colors = False
+
+# Arguments to define use of color
+if len(sys.argv) == 2:
+    if sys.argv[1].lower() == "true":
+        colors = True
+    elif sys.argv[1].lower() == "false":
+        colors = False
+    else:
+        print("Invalid argument")
+        sys.exit()
+
 # Creates the window and area that the game will be played on
 curses.initscr()
 win = curses.newwin(20, 60, 0, 0)
+
+# Check if screen supports colors
+if colors and not curses.has_colors():
+    print("Terminal does not support colors")
+    sys.exit()
+
+# Initialize colors
+curses.start_color()
+curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
+curses.init_pair(2, curses.COLOR_BLUE, curses.COLOR_BLACK)
+
+color_pair_p1 = curses.color_pair(1) if colors else curses.color_pair(0)
+color_pair_p2 = curses.color_pair(2) if colors else curses.color_pair(0)
+
 # Disables the echo from user input
 curses.noecho()
 # Disables the cursor
@@ -182,11 +209,11 @@ while True:
         win.addch(food[0], food[1], "*")
 
     # Draws snakes on the screen
-    win.addch(snake_p1[1][0], snake_p1[1][1], "#")
-    win.addch(snake_p1[0][0], snake_p1[0][1], "0")
+    win.addch(snake_p1[1][0], snake_p1[1][1], "#", color_pair_p1)
+    win.addch(snake_p1[0][0], snake_p1[0][1], "0", color_pair_p1)
 
-    win.addch(snake_p2[1][0], snake_p2[1][1], "#")
-    win.addch(snake_p2[0][0], snake_p2[0][1], "0")
+    win.addch(snake_p2[1][0], snake_p2[1][1], "#", color_pair_p2)
+    win.addch(snake_p2[0][0], snake_p2[0][1], "0", color_pair_p2)
 
     # If the players' heads touch, its a draw
     if snake_p1[0] == snake_p2[0]:
