@@ -205,14 +205,22 @@ while True:
         winner = 1
         break
 
-# Displays final score if game has not been exited
+# Displays final result if game has not been exited
 if winner != -1:
     if winner == 0:
-        print("DRAW")
+        win.addstr(10, 26, "DRAW")
     elif winner == 1:
-        print("P1 WINS")
+        win.addstr(10, 24, "P1 WINS")
     elif winner == 2:
-        print("P2 WINS")
+        win.addstr(10, 24, "P2 WINS")
 
-    print("P1 Score: " + str(food_eaten_p1))
-    print("P2 Score: " + str(food_eaten_p2))
+    win.addstr(12, 20, "P1 Food Eaten: " + str(food_eaten_p1))
+    win.addstr(13, 20, "P2 Food Eaten: " + str(food_eaten_p2))
+    win.addstr(15, 19, "Press SPACE to exit")
+
+key_event = -1
+
+while key_event != SPACE_BAR:
+    key_event = win.getch()
+
+curses.endwin()
