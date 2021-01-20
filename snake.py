@@ -71,7 +71,7 @@ food_eaten_p2 = 0
 # 0 - DRAW
 # 1 - P1
 # 2 - P2
-winner = 0
+winner = -1
 
 # Initializing input
 # P1 and P2 key are used for each snake
@@ -225,21 +225,22 @@ while True:
     win.addch(snake_p2[1][0], snake_p2[1][1], "#", color_pair_p2)
     win.addch(snake_p2[0][0], snake_p2[0][1], "0", color_pair_p2)
 
-    # If the players' heads touch, its a draw
-    if snake_p1[0] == snake_p2[0]:
-        win.addch(snake_p1[0][0], snake_p1[0][1], "X")
-        winner = 0
-        break
-
     # If a player touches itself or the other snake, the game ends
-    if snake_p1[0] in snake_p1[1:] or snake_p1[0] in snake_p2[1:]:
+    if snake_p1[0] in snake_p1[1:] or snake_p1[0] in snake_p2[0:]:
         win.addch(snake_p1[0][0], snake_p1[0][1], "X")
         winner = 2
-        break
 
-    if snake_p2[0] in snake_p2[1:] or snake_p2[0] in snake_p1[1:]:
+    if snake_p2[0] in snake_p2[1:] or snake_p2[0] in snake_p1[0:]:
         win.addch(snake_p2[0][0], snake_p2[0][1], "X")
-        winner = 1
+
+        # If P2 was already declared winner, that means both snakes died
+        # So it'll be a draw
+        if winner == 2:
+            winner = 0
+        else:
+            winner = 1
+
+    if winner != -1:
         break
 
 # Displays final result if game has not been exited
