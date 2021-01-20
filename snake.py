@@ -40,12 +40,18 @@ while key != 27:
     if event != -1:
         key = event
 
-    # If SPACE BAR or P are pressed, PAUSE THE GAME
+    # If SPACE BAR or P are pressed, pause the game
     if key == ord(" ") or key == ord("p"):
         key = -1
         win.addstr(10, 25, " PAUSED ")
-        while key != ord(" ") and key != ord("p"):
+
+        while key != ord(" ") and key != ord("p") and key != 27:
             key = win.getch()
+
+        # If Esc key is pressed during PAUSE, exit
+        if key == 27:
+            break
+
         key = prevKey
         win.addstr(10, 25, "        ")
         continue
