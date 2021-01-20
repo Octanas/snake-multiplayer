@@ -13,15 +13,26 @@ SPACE_BAR = ord(" ")
 ESC = 27
 
 colors = False
+interval = 75
 
 # Arguments to define use of color
-if len(sys.argv) == 2:
+if len(sys.argv) > 1:
     if sys.argv[1].lower() == "true":
         colors = True
     elif sys.argv[1].lower() == "false":
         colors = False
     else:
-        print("Invalid argument")
+        print("Invalid argument for color")
+        sys.exit()
+
+if len(sys.argv) > 2:
+    try:
+        interval = int(sys.argv[2])
+
+        if interval <= 0:
+            raise ValueError()    
+    except ValueError:
+        print("Invalid argument for frame interval")
         sys.exit()
 
 # Creates the window and area that the game will be played on
@@ -81,14 +92,9 @@ while True:
     )
     win.addstr(0, 26, " SNAKE ")
 
-    # Increases the speed of Snake as its length increases
-    win.timeout(
-        int(
-            150
-            - (len(max(snake_p1, snake_p2)) / 5 + len(max(snake_p1, snake_p2)) / 10)
-            % 120
-        )
-    )
+    # Set interval between frames
+    # It depends on input, if the user presses a key, the full time won't be waited
+    win.timeout(interval)
 
     # Registers user input
     key_event = win.getch()

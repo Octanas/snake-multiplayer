@@ -20,11 +20,12 @@ python snake.py
 
 The program accepts the following parameters (the order must be the same):
 * Use colors ("true" or "false", default = false)
+* Frame interval (milliseconds per frame, default = 75)
 
-The following example runs the program with colors enabled:
+The following example runs the program with colors enabled with speed of 100 milliseconds per frame:
 
 ```
-python snake.py true
+python snake.py true 100
 ```
 
 ## Sources
