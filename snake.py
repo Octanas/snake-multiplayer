@@ -30,7 +30,7 @@ if len(sys.argv) > 2:
         interval = int(sys.argv[2])
 
         if interval <= 0:
-            raise ValueError()    
+            raise ValueError()
     except ValueError:
         print("Invalid argument for frame interval")
         sys.exit()
@@ -93,7 +93,7 @@ while True:
         40 - (len(str(food_eaten_p2)) - 1),
         " Food Eaten P2: " + str(food_eaten_p2) + " ",
     )
-    win.addstr(0, 52, "P1", color_pair_p2)
+    win.addstr(0, 52 - (len(str(food_eaten_p2)) - 1), "P1", color_pair_p2)
     win.addstr(0, 26, " SNAKE ")
 
     # Set interval between frames
