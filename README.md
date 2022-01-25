@@ -44,4 +44,4 @@ When a snake dies, its opponent is declared the victor. If both snakes die at th
 
 ## Sources
 
-Based on: https://gist.github.com/sanchitgangwar/2158088
+Based on: https://gist.github.com/sanchitgangwar/2158089
