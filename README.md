@@ -1,6 +1,6 @@
 # Python Snake Multiplayer
 
-The objective for this project is to modify an [already existing Snake game code in Python](https://gist.github.com/sanchitgangwar/2158088) so it supports multiplayer, using mechanics from both the Snake game and the Tron Cycle game.
+The objective for this project is to modify an [already existing Snake game code in Python](https://gist.github.com/sanchitgangwar/2158089) so it supports multiplayer, using mechanics from both the Snake game and the Tron Cycle game.
 
 ## Getting Started (for Windows)
 
